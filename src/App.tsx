@@ -1,23 +1,23 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import './App.css';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { useSubscribe } from 'react-pwa-push-notifications';
-import toast, { Toaster } from 'react-hot-toast';
-import TextInput from './components/Input';
-import axios from 'axios';
-import Links from './components/Links';
-import { QRCode, QRSvg } from 'sexy-qr';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import "./App.css";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { useSubscribe } from "react-pwa-push-notifications";
+import toast, { Toaster } from "react-hot-toast";
+import TextInput from "./components/Input";
+import axios from "axios";
+import Links from "./components/Links";
+import { QRCode, QRSvg } from "sexy-qr";
 // in PROD use from .env
 const PUBLIC_KEY =
-  'BDZJSiMXSJUhryPkjFh_H84ZeEjVNfq5STCXVDEW4bpXye1mybGCjufRFIVmMxJN1wHOGUunGyBra0qvSa0fGJ8';
+  "BDZJSiMXSJUhryPkjFh_H84ZeEjVNfq5STCXVDEW4bpXye1mybGCjufRFIVmMxJN1wHOGUunGyBra0qvSa0fGJ8";
 
 function App() {
   const [loadingSubscribe, setLoadingSubscribe] = useState<boolean>(false);
   const [loadingPush, setLoadingPush] = useState<boolean>(false);
-  const [pushId, setPushId] = useState<string>('');
-  const [message, setMessage] = useState<string>('World');
-  const [title, setTitle] = useState<string>('Hello');
-  const [subscribeId, setSubscribeId] = useState<string>('');
+  const [pushId, setPushId] = useState<string>("");
+  const [message, setMessage] = useState<string>("World");
+  const [title, setTitle] = useState<string>("Hello");
+  const [subscribeId, setSubscribeId] = useState<string>("");
   const [showSubscribe, setShowSubscribe] = useState<boolean>(true);
 
   const onShowSubscribe = () => {
@@ -30,10 +30,10 @@ function App() {
   const qrCode = useMemo(() => {
     const qr = new QRCode({
       content: window.location.href,
-      ecl: 'M',
+      ecl: "M",
     });
     return new QRSvg(qr, {
-      fill: '#182026',
+      fill: "#182026",
       cornerBlocksAsCircles: true,
       size: 200,
       radiusFactor: 0.75,
@@ -51,11 +51,11 @@ function App() {
       setLoadingSubscribe(true);
       try {
         const subscription = await getSubscription();
-        await axios.post('https://push.fancy-app.site/api/subscribe', {
+        await axios.post("https://push.fancy-app.site/api/subscribe", {
           subscription: subscription,
           id: subscribeId,
         });
-        toast.success('Subscribe success');
+        toast.success("Subscribe success");
       } catch (e: any) {
         console.warn(e);
         toast.error(`${JSON.stringify(e)}`);
@@ -63,7 +63,7 @@ function App() {
         setLoadingSubscribe(false);
       }
     },
-    [getSubscription, subscribeId],
+    [getSubscription, subscribeId]
   );
 
   const onSubmitPush = useCallback(
@@ -71,19 +71,19 @@ function App() {
       e.preventDefault();
       setLoadingPush(true);
       try {
-        await axios.post('https://push.fancy-app.site/api/send', {
+        await axios.post("https://push.fancy-app.site/api/send", {
           message,
           title,
           id: pushId,
         });
-        toast.success('Push success');
+        toast.success("Push success");
       } catch (e: any) {
         toast.error(`${JSON.stringify(e)}`);
       } finally {
         setLoadingPush(false);
       }
     },
-    [pushId, message, title],
+    [pushId, message, title]
   );
 
   const onChange = useCallback(
@@ -91,7 +91,7 @@ function App() {
       (e: React.ChangeEvent<HTMLInputElement>) => {
         setState(e.target.value);
       },
-    [],
+    []
   );
 
   useEffect(() => {
@@ -121,14 +121,14 @@ function App() {
             </div>
           </div>
           <div
-            className={'qrCode'}
+            className={"qrCode"}
             dangerouslySetInnerHTML={{ __html: qrCode }}
           />
         </div>
         <div className="tabs">
           <div className={`tab-item`}>
             <button
-              className={`tab ${showSubscribe ? 'active' : ''}`}
+              className={`tab ${showSubscribe ? "active" : ""}`}
               onClick={onShowSubscribe}
             >
               Subscribe
@@ -136,7 +136,7 @@ function App() {
           </div>
           <div className={`tab-item`}>
             <button
-              className={`tab ${!showSubscribe ? 'active' : ''}`}
+              className={`tab ${!showSubscribe ? "active" : ""}`}
               onClick={onShowPush}
             >
               Push
@@ -165,7 +165,7 @@ function App() {
                 value={message}
                 onChange={onChange(setMessage)}
               />
-              <button className={loadingPush ? 'loading' : ''} type="submit">
+              <button className={loadingPush ? "loading" : ""} type="submit">
                 Send
               </button>
             </form>
@@ -182,7 +182,7 @@ function App() {
                 onChange={onChange(setSubscribeId)}
               />
               <button
-                className={loadingSubscribe ? 'loading' : ''}
+                className={loadingSubscribe ? "loading" : ""}
                 type="submit"
               >
                 Send
